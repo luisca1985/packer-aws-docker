@@ -1,0 +1,28 @@
+{
+    "builders": [{
+        "type": "amazon-ebs",
+        "region": "us-west-2",
+        "source_ami": "ami-0c09c7eb16d3e8e70",
+        "source_ami_filter": {
+            "owners": ["099720109477"],
+            "most_recent": true
+        },
+        "instance_type": "t2.micro",
+        "ssh_username": "ubuntu",
+        "ami_name": "packer-demo"
+    }],
+    "provisioners": [{
+        "type": "file",
+        "source": "./scripts/packer-key.pub",
+        "destination": "~/.ssh/"
+    },
+    {
+        "type": "shell",
+        "inline": ["cat ~/.ssh/packer-key.pub >> ~/.ssh/authorized_keys"]
+    },
+    {
+        "type": "shell",
+        "script": "./scripts/install-docker.sh"
+    }
+]
+}
